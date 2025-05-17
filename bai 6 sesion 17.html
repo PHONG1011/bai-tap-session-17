@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Máy Tính Đơn Giản</title>
+
+  <style>
+    body {
+     font-family: Arial, sans-serif;
+     display: flex;
+     justify-content: center;
+     margin-top: 50px;
+   }
+   
+   .calculator {
+     width: 250px;
+   }
+   
+   #display {
+     width: 100%;
+     height: 50px;
+     font-size: 24px;
+     text-align: right;
+     padding: 10px;
+     margin-bottom: 10px;
+   }
+   
+   .buttons {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     gap: 10px;
+   }
+   
+   button {
+     height: 50px;
+     font-size: 20px;
+   }
+   
+   .operator {
+     background-color: #e0e0e0;
+   }
+   
+   .equals {
+    background-color: #2196F3;
+    color: white;
+    grid-row: span 44;
+   }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly>
+    <div class="buttons">
+      <button class="operator">+</button>
+      <button class="operator">-</button>
+      <button class="operator">*</button>
+      <button class="operator">/</button>
+
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button id="equals" class="equals">=</button>
+
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+
+      <button>0</button>
+      <button>.</button>
+      <button id="clear">C</button>
+    </div>
+  </div>
+
+  <script>
+  const display = document.getElementById('display');
+   const buttons = document.querySelectorAll('button');
+   
+   let currentInput = '';
+   let operator = '';
+   let firstValue = null;
+   
+   buttons.forEach(button => {
+     button.addEventListener('click', () => {
+       const value = button.textContent;
+   
+       if (value >= '0' && value <= '9' || value === '.') {
+         currentInput += value;
+         display.value = currentInput;
+       } else if (value === '+' || value === '-' || value === '*' || value === '/') {
+         if (currentInput === '') return;
+         firstValue = parseFloat(currentInput);
+         operator = value;
+         currentInput = '';
+       } else if (value === '=') {
+         if (currentInput === '' || operator === '') return;
+         const secondValue = parseFloat(currentInput);
+         let result = 0;
+   
+         if (operator === '/' && secondValue === 0) {
+           result = 'Lỗi chia 0';
+         } else {
+           switch (operator) {
+             case '+': result = firstValue + secondValue; break;
+             case '-': result = firstValue - secondValue; break;
+             case '*': result = firstValue * secondValue; break;
+             case '/': result = firstValue / secondValue; break;
+           }
+         }
+   
+         display.value = result;
+         currentInput = '';
+         operator = '';
+         firstValue = null;
+       } else if (value === 'C') {
+         display.value = '';
+         currentInput = '';
+         operator = '';
+         firstValue = null;
+       }
+     });
+   });
+   
+  </script>
+</body>
+</html>
